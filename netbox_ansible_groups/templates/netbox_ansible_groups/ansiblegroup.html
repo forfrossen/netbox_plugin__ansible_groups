@@ -1,0 +1,85 @@
+{% extends 'generic/object.html' %}
+{% load render_table from django_tables2 %}
+{% load helpers %}
+
+{% block content %}
+<div class="row">
+    <div class="col col-md-6">
+        <div class="card">
+            <h5 class="card-header">Ansible Group</h5>
+            <div class="card-body">
+                <table class="table table-hover attr-table">
+                    <tr>
+                        <td>Name</td>
+                        <td>{{ object.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Slug</td>
+                        <td>{{ object.slug }}</td>
+                    </tr>
+                    {% if object.description %}
+                    <tr>
+                        <td>Description</td>
+                        <td>{{ object.description }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if object.parent_group %}
+                    <tr>
+                        <td>Parent Group</td>
+                        <td><a href="{{ object.parent_group.get_absolute_url }}">{{ object.parent_group.name }}</a></td>
+                    </tr>
+                    {% endif %}
+                    {% if object.variables %}
+                    <tr>
+                        <td>Variables</td>
+                        <td><pre>{{ object.variables }}</pre></td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+        {% include 'inc/panels/tags.html' %}
+        {% include 'inc/panels/custom_fields.html' %}
+    </div>
+    <div class="col col-md-6">
+        {% if child_groups %}
+        <div class="card">
+            <h5 class="card-header">Child Groups ({{ child_groups.count }})</h5>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    {% for child in child_groups %}
+                    <li><a href="{{ child.get_absolute_url }}">{{ child.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if devices %}
+        <div class="card">
+            <h5 class="card-header">Devices ({{ devices.count }})</h5>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    {% for device in devices %}
+                    <li><a href="{{ device.get_absolute_url }}">{{ device.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if virtual_machines %}
+        <div class="card">
+            <h5 class="card-header">Virtual Machines ({{ virtual_machines.count }})</h5>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    {% for vm in virtual_machines %}
+                    <li><a href="{{ vm.get_absolute_url }}">{{ vm.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
